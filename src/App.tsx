@@ -1,25 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styles from './App.module.css';
+import Pizza from './components/Pizza';
+import pizzas from './data/pizzas.json';
+import { ReactComponent as PizzaSVG } from '../src/svg/pizza.svg';
+import Cart from './components/Cart/Cart';
+import AppStateProvider from './components/AppState';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppStateProvider>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <div style={{ marginLeft: "150px" }}>
+            <svg><PizzaSVG /></svg>
+          </div>
+          <div className={styles.siteTitle}>Delicious Pizza</div>
+          <Cart />
+        </div>
+        <ul>
+          {pizzas.map(pizza => <Pizza key={pizza.id} pizza={pizza} />)}
+        </ul>
+      </div>
+    </AppStateProvider>
   );
 }
 
