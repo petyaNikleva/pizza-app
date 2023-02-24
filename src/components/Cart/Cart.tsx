@@ -11,8 +11,6 @@ interface State {
     isOpen: boolean;
 }
 
-let q = 0;
-
 class Cart extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
@@ -31,20 +29,19 @@ class Cart extends React.Component<Props, State> {
 
     // Here how to use context in class component
 
-
     render() {
         return (
             <AppStateContext.Consumer>{(state) => {
+                const itemCounts = state.cart.items.reduce(
+                    (sum, item) => sum + item.quantity,
+                    0
+                )
                 return (
                     <div className={styles.cartContainer}>
                         <button className={styles.button} type='button'
                             onClick={this.handleClick}>
                             <FiShoppingCart />
-                            <span>{state.cart.items.reduce(
-                                (quantity, item) => item.quantity + quantity,
-                                0
-                            )
-                            } pizza(s)</span>
+                            <span>{itemCounts} pizza(s)</span>
                         </button>
                         <div className={styles.cartDropDown}
                             style={{
