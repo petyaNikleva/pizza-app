@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { FiShoppingCart } from 'react-icons/fi';
 
 import styles from './Cart.module.css';
@@ -12,11 +12,14 @@ interface State {
 }
 
 class Cart extends React.Component<Props, State> {
+    #containerRef: React.RefObject<HTMLDivElement>
     constructor(props: Props) {
         super(props);
         this.state = {
             isOpen: false,
         };
+
+        this.#containerRef = createRef();
 
     }
 
@@ -26,8 +29,20 @@ class Cart extends React.Component<Props, State> {
         this.setState((prevState) => ({ isOpen: !prevState.isOpen })
         )
     }
-
     // Here how to use context in class component
+
+    handleOutSideClick = (e: MouseEvent) => {
+        if (this.#containerRef.current && !this.#containerRef.current.contains(e.target as Node))
+        this.setState({ isOpen: false });
+    }
+
+    componentDidMount(): void {
+        document.addEventListener('mousedown', this.handleOutSideClick)
+    }
+
+    componentWillUnmount(): void {
+        document.removeEventListener('mousedown', this.handleOutSideClick)
+    }
 
     render() {
         return (
@@ -37,7 +52,7 @@ class Cart extends React.Component<Props, State> {
                     0
                 )
                 return (
-                    <div className={styles.cartContainer}>
+                    <div className={styles.cartContainer} ref={this.#containerRef}>
                         <button className={styles.button} type='button'
                             onClick={this.handleClick}>
                             <FiShoppingCart />
